@@ -1,1 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        #todoList {
+            border-collapse: collapse;
+            width: 70%;
+            margin: 0 auto;
+        }
+        #todoList th, #todoList td {
+            border: 1px solid #61b31f;
+            padding: 8px;
+            text-align: left;
+        }
+        #todoList th {
+            background-color: #be1010;
+        }
+        #todoList th:first-child, #todoList th:last-child {
+            width: 50%;
+        }
+        #todoList th:nth-child(2) {
+            width: 90%;
+        }
+        .add-form {
+            margin-top: 50px;
+            width: 70%;
+            margin: 50px auto;
+        }
+        .add-form input[type="text"] {
+            padding: 8px;
+            width: 70%;
+        }
+        .add-form button {
+            padding: 400px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
 
+<h2 style="text-align: center;">To-Do List от Петра Марченкова</h2>
+
+<table id="todoList">
+    <thead>
+        <tr>
+            <th>№</th>
+            <th>Задача</th>
+            <th>Действия</th>
+        </tr>
+    </thead>
+    <tbody id="listBody">
+        {{rows}}
+    </tbody>
+</table>
+
+<div class="add-form">
+    <input type="text" id="newItem" placeholder="Enter new item">
+    <button onclick="addItem()">Добавить</button>
+</div>
+
+<script>
+    function addItem() {
+        const input = document.getElementById('newItem');
+        const text = input.value.trim();
+        if (!text) return;
+
+        fetch('/add-item', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ text })
+        }).then(() => location.reload());
+    }
+
+    function deleteItem(id) {
+        fetch(`/delete-item/${id}`, {
+            method: 'DELETE'
+        }).then(() => location.reload());
+    }
+
+    function editItem(id) {
+        const newText = prompt('новая задача:');
+        if (!newText || newText.trim() === '') return;
+
+        fetch(`/edit-item/${id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ text: newText.trim() })
+        }).then(() => location.reload());
+    }
+</script>
+
+</body>
+</html>
