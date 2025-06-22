@@ -16,4 +16,4 @@ echo "✅ MySQL is up!"
 python mybot.py &
 
 # Запуск фронтенда с serve
-node index.jss
+node index.js
