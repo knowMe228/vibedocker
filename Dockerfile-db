@@ -1,0 +1,8 @@
+FROM mysql:8.0
+
+
+
+# Копируем ваш локальный db.sql внутрь образа
+COPY db.sql /docker-entrypoint-initdb.d/db.sql
+
+EXPOSE 3306

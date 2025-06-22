@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    container_name: lab12-app
+    ports:
+      - "80:80"
+    depends_on:
+      - db
+    environment:
+      - DB_HOST=db
+      - DB_USER=root
+      - DB_PASSWORD=root
+      - DB_NAME=lab1
+    networks:
+      - labnet
+
+  db:
+    build:
+      context: .
+      dockerfile: Dockerfile-db  # новый Dockerfile для инициализации
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: lab1
+    ports:
+      - "3306:3306"
+    networks:
+      - labnet
+
+volumes:
+  db_data:
+
+networks:
+  labnet:
